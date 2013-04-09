@@ -78,8 +78,3 @@ Limitations / To-dos
 - I'd like to strip the Java class files from the Dalvik bundles to save space, but Felix (as of v4.1.0) doesn't like that - it checks the presence of the .class file in the bundle, even though it won't load it. I haven't checked if that's still the case in v4.2.1. A patch for this would be valuable.
 
 - The BundleProvider / SimpleBundleProvider / AndroidBundleProvider hierarchy is overkill if you only care about running on Android. I went to the trouble because I wanted to keep the framework launcher common to both Dalvik and Java. As structured, you could move classes containing Android-specific code into a separate JAR and keep a "pure" runtime for either platform. That level of sophistication wasn't needed for this proof-of-concept.
-
-android-osgi-spike
-==================
-
-Technology demonstrator for building and deploying OSGi-based apps with browser-based user interfaces on Android.

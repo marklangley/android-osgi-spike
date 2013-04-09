@@ -1,7 +1,22 @@
-*.class
+
+# Editor artifacts #
+
 *.bak
 
-# Package Files #
+# Java artifacts #
+
 *.jar
 *.war
 *.ear
+*.class
+
+# Eclipse artifacts #
+
+.settings/
+.classpath
+.project
+
+# Android artifacts
+
+bin/classes/
+bin/jarlist.cache
