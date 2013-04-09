@@ -1,0 +1,37 @@
+  <!-- 
+    - Default LogBack configuration writes debug-level log output to
+    - Android LogCat and to /mnt/sdcard/logback/android-osgi-spike-log.txt
+    -->
+    <configuration>
+       <!-- 
+         - configure Logcat output 
+         -->
+       <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender" >
+         <tagEncoder>
+           <pattern>%logger{5}</pattern>
+         </tagEncoder>
+         <encoder>
+           <pattern>%msg%n%rootException{full}</pattern>
+         </encoder>
+       </appender>
+       
+       
+       <!-- 
+         - use Android's built-in environment variable for the path to the
+         - SD card: EXTERNAL_STORAGE
+         -->
+       <property name="log_path" value="${EXTERNAL_STORAGE}/logback/foo/" />
+       
+       <appender name="SDCARD" class="ch.qos.logback.core.FileAppender">
+         <file>${log_path:-}spike.log</file>
+         <append>false</append>
+         <encoder>
+           <pattern>%-8relative %-5level [%-10thread] %logger{35} - %msg%n%rootException{full}</pattern>
+         </encoder>  
+       </appender>
+
+       <root level="TRACE" >
+         <appender-ref ref="LOGCAT" />
+         <appender-ref ref="SDCARD" />
+       </root>
+    </configuration>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello android-osgi-spike!</string>
+    <string name="app_name">OSGi Test</string>
+    <string name="start_osgi">Start/Stop OSGi server</string>
+    <string name="launch_console">Web Console</string>
+    <string name="launch_servlet">Hello World</string>
+    <string name="results">Results</string>
+</resources>

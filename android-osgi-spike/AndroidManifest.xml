@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="ca.langleys.spike.android.osgi" android:versionCode="1" android:versionName="0.0.1-SNAPSHOT">
+
+  <uses-sdk
+      android:minSdkVersion="9"
+      android:targetSdkVersion="17"
+    />
+
+  <!-- 
+    - Allows LogBack to write logging output to the SD card.
+    -->
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  
+  <!--
+    - Allows network sockets to be opened, to serve the application web pages
+    -->
+  <uses-permission android:name="android.permission.INTERNET"/>
+  
+  <application android:icon="@drawable/icon" android:label="@string/app_name" android:allowBackup="false">
+      <activity android:name=".HelloAndroidActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+  </application>
+
+</manifest>
+

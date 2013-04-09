@@ -19,4 +19,4 @@
 # Android artifacts
 
 bin/classes/
-bin/jarlist.cache
+jarlist.cache

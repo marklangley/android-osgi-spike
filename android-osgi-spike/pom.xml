@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ca.langleys.experiments</groupId>
+    <artifactId>android-osgi-spike</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>apk</packaging>
+    <name>Android OSGi Spike Demo</name>
+    <description>
+    	Demonstrates compiling and deploying an OSGi framework and bundles
+    	on the Android platform.
+    </description>
+    <url/>
+
+    <properties>
+        <platform.version> 2.3.3</platform.version>
+        <logback.version>1.0.7-1</logback.version>
+        <osgi.version>4.3.1</osgi.version>
+    </properties>
+
+    <dependencies>
+
+        <!--
+          - Unit testing
+          -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    	
+        <!--
+          - Android dependencies
+          -->
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!--
+          - Logging APIs
+          -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        
+        <!--
+          - next two jars provide logging support on Android
+          -->
+        <dependency>
+            <groupId>com.github.tony19</groupId>
+            <artifactId>logback-android-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tony19</groupId>
+            <artifactId>logback-android-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        
+        <!--
+          - Next jar provides logging support on traditional Java.
+          - In a production system we should have three separate builds,
+          - one for the framework, one for final assembly targeting the JRE,
+          - and one for final assembly targeting Dalvik. For simplicity of the
+          - spike, that hasn't been done.
+          -->
+        <!--
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.7</version>
+        </dependency>
+        -->
+        
+        <!--
+          - OSGi framework
+          -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <version>4.2.1</version>
+        </dependency>
+        
+        <!--
+          - Standard OSGi framework bundles. These are marked as "provided"
+          - because
+          - (1) We don't want them statically linked into the APK
+          - (2) We know that Ant will bring them into the auto-deploy
+          -     assets folder (ref. build.xml)
+          -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+            <version>${osgi.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.http.jetty</artifactId>
+            <version>2.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.webconsole</artifactId>
+            <version>4.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.geronimo.bundles</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211_1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!--
+          - A home-grown bundle to exercise the servlet container
+          -->
+        <dependency>
+            <groupId>ca.langleys.experiments</groupId>
+            <artifactId>hello-servlet</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        
+
+				<!--
+				  - Future enhancements to the spike demo could include
+				  - providing a shell and using it to download and install
+				  - bundles from remote repositories.
+				  -
+				  - When that time comes, these dependencies will be needed.
+				  -->
+<!--
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.bundlerepository</artifactId>
+            <version>1.6.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.runtime</artifactId>
+            <version>0.10.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.shell</artifactId>
+            <version>0.10.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.command</artifactId>
+            <version>0.12.0</version>
+            <scope>provided</scope> 
+        </dependency>
+-->        
+        
+    </dependencies>
+
+    <build>
+        <plugins>
+        
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+                    <assetsDirectory>${project.basedir}/assets</assetsDirectory>
+                    <resourceDirectory>${project.basedir}/res</resourceDirectory>
+                    <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+                    <sdk>
+                        <platform>10</platform>
+                    </sdk>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            
+            <!--
+              - create Dalvik classes for each of the included bundles
+              - and drop them into the resource folder before building the
+              - .jar file
+              -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <ant antfile="build.xml" target="dexify-bundles"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+                
+                        
+        </plugins>
+    </build>
+</project>

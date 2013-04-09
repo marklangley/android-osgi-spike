@@ -1,0 +1,76 @@
+<project name="android-osgi-spike-helper" default="help" basedir=".">
+  <description>
+    Ant scripts in support of the Maven build. See pom.xml.
+  </description>
+  
+  <!--
+    Convert the JAR file to Android DEX format for each OSGi bundle 
+    that ships in the core system
+  -->
+  <target name="dexify-bundles">
+    <echo>
+      -------------------------------------------
+      Dexifying the core bundles
+      -------------------------------------------
+    </echo>
+    <!-- 
+      Wipe out any previous dexified bundles and prepare a 
+      working directory to run the transformations in.
+    -->
+    <delete dir="assets/core-bundles" quiet="true"/>
+    <mkdir dir="assets/core-bundles"/>
+    
+    <delete dir="target/dex" quiet="true"/>
+    <mkdir dir="target/dex"/>
+
+    <!-- Process each bundle in turn -->
+    <antcall target="dexify-one"><param name="dependency" value="${org.osgi:org.osgi.compendium:jar}"/></antcall>
+    <antcall target="dexify-one"><param name="dependency" value="${org.apache.felix:org.apache.felix.http.jetty:jar}"/></antcall>
+    <antcall target="dexify-one"><param name="dependency" value="${org.apache.felix:org.apache.felix.webconsole:jar}"/></antcall>
+    <antcall target="dexify-one"><param name="dependency" value="${commons-fileupload:commons-fileupload:jar}"/></antcall>
+    <antcall target="dexify-one"><param name="dependency" value="${commons-io:commons-io:jar}"/></antcall>
+    <antcall target="dexify-one"><param name="dependency" value="${org.apache.geronimo.bundles:json:jar}"/></antcall>
+    
+    
+    <antcall target="dexify-one"><param name="dependency" value="${ca.langleys.experiments:hello-servlet:jar}"/></antcall>
+    
+  </target>
+ 
+  <!--
+    Convert all .class files in a JAR to .dex format, then add the dex 
+    information into the jar. 
+    
+    Unzip the JAR file, delete the .class files, and rezip the jar.
+    
+    Finally, copy the modified jar into the assets
+    folder so that it will be built into the .APK.
+  -->
+  <target name="dexify-one">
+    <basename property="jarfile" file="${dependency}"/>
+    <echo>
+      ============================
+      Dexifying ${jarfile}...
+    </echo>
+    <echo>Copying...</echo>
+    <copy file="${dependency}" tofile="${basedir}/target/dex/original-${jarfile}"/>
+    <copy file="${dependency}" tofile="${basedir}/target/dex/dexed-${jarfile}"/>
+    <echo>Running dx...</echo>
+    <exec executable="cmd">
+      <arg value="/c"/>
+      <arg value="dx"/>
+      <arg value="--dex"/>
+      <arg value="--output=${basedir}/target/dex/classes.dex"/>
+      <arg value="${basedir}/target/dex/dexed-${jarfile}"/>
+    </exec>
+    <echo>Running aapt...</echo>
+    <exec executable="cmd" dir="${basedir}/target/dex/">
+      <arg value="/c"/>
+      <arg value="aapt.exe"/>
+      <arg value="add"/>
+      <arg value="dexed-${jarfile}"/>
+      <arg value="classes.dex"/>
+    </exec>
+    <echo>Moving to asset folder...</echo>    
+    <copy file="${basedir}/target/dex/dexed-${jarfile}" tofile="${basedir}/assets/core-bundles/${jarfile}"/>
+  </target>
+</project>
